@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>แสดงชื่อวัน (เว็บ + Console)</title>
+</head>
+<body>
+  <h2>แสดงชื่อวันจากเลข (1-7)</h2>
+  <label>กรอกเลขวัน:</label><br>
+  <input type="number" id="dayInput" min="1" max="7"><br>
+  <button onclick="checkDay()">แสดงชื่อวัน</button>
+  <div id="dayResult"></div>
+
+  <script>
+    function checkDay() {
+      const input = document.getElementById('dayInput').value;
+      const day = parseInt(input);
+      const result = document.getElementById('dayResult');
+
+      let msg = "";
+
+      switch (day) {
+        case 1: msg = "📅 วันจันทร์"; break;
+        case 2: msg = "📅 วันอังคาร"; break;
+        case 3: msg = "📅 วันพุธ"; break;
+        case 4: msg = "📅 วันพฤหัสบดี"; break;
+        case 5: msg = "📅 วันศุกร์"; break;
+        case 6: msg = "📅 วันเสาร์"; break;
+        case 7: msg = "📅 วันอาทิตย์"; break;
+        default: msg = "⚠️ กรุณาใส่เลขระหว่าง 1 ถึง 7";
+      }
+
+      result.innerHTML = `<p>${msg}</p>`;
+      console.log(msg);
+    }
+  </script>
+</body>
+</html>

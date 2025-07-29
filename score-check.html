@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>ตรวจสอบผลสอบ (เว็บ + Console)</title>
+</head>
+<body>
+  <h2>ตรวจสอบผลสอบ</h2>
+  <label>กรอกคะแนนของคุณ (0 - 100):</label><br>
+  <input type="number" id="scoreInput" min="0" max="100"><br>
+  <button onclick="checkScore()">ตรวจสอบ</button>
+  <div id="scoreResult"></div>
+
+  <script>
+    function checkScore() {
+      const input = document.getElementById('scoreInput').value;
+      const score = parseFloat(input);
+      const result = document.getElementById('scoreResult');
+
+      if (!isNaN(score) && score >= 0 && score <= 100) {
+        if (score >= 50) {
+          const msg = `✅ คุณสอบผ่าน ด้วยคะแนน ${score} คะแนน`;
+          result.innerHTML = `<p style="color: green;">${msg}</p>`;
+          console.log(msg);
+        } else {
+          const msg = `❌ คุณสอบไม่ผ่าน ด้วยคะแนน ${score} คะแนน`;
+          result.innerHTML = `<p style="color: red;">${msg}</p>`;
+          console.log(msg);
+        }
+      } else {
+        const msg = "⚠️ กรุณากรอกคะแนนที่ถูกต้องระหว่าง 0 - 100";
+        result.innerHTML = `<p style="color: blue;">${msg}</p>`;
+        console.log(msg);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เครื่องคำนวณ BMI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(to right, #e0f2fe, #bfdbfe);
+            min-height: 100vh;
+        }
+        .container {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .info-table {
+            transition: all 0.3s ease;
+        }
+        .info-table.hidden {
+            display: none;
+        }
+        .result {
+            animation: slideIn 0.5s ease-in-out;
+        }
+        @keyframes slideIn {
+            0% { opacity: 0; transform: translateX(-20px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4">
+    <div class="container max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8">
+        <h1 class="text-3xl font-bold text-center text-blue-600 mb-6">เครื่องคำนวณ BMI</h1>
+        
+        <div class="space-y-4">
+            <div class="input-group">
+                <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">น้ำหนัก (กิโลกรัม):</label>
+                <input type="number" id="weight" placeholder="ตัวอย่าง: 70" min="0" max="300" step="0.1" 
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            
+            <div class="input-group">
+                <label for="height" class="block text-sm font-medium text-gray-700 mb-1">ส่วนสูง (เซนติเมตร):</label>
+                <input type="number" id="height" placeholder="ตัวอย่าง: 170" min="0" max="250" step="0.1"
+                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            
+            <div class="flex space-x-4">
+                <button id="calculate-btn" 
+                        class="flex-1 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300">
+                    คำนวณ BMI
+                </button>
+                <button id="show-btn" 
+                        class="flex-1 bg-gray-600 text-white py-3 rounded-lg hover:bg-gray-700 transition duration-300">
+                    แสดง/ซ่อนตาราง BMI
+                </button>
+            </div>
+        </div>
+
+        <div id="result" class="result mt-6 p-4 bg-blue-50 rounded-lg text-center hidden"></div>
+        
+        <div id="detail" class="mt-8">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">ตารางแสดงค่า BMI</h3>
+            <table class="info-table w-full border-collapse bg-white rounded-lg shadow">
+                <thead>
+                    <tr class="bg-blue-100">
+                        <th class="p-3 text-left">ระดับ BMI</th>
+                        <th class="p-3 text-left">ค่า BMI (กก./ม²)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="hover:bg-gray-50">
+                        <td class="p-3 border-t">น้ำหนักน้อยกว่าปกติ</td>
+                        <td class="p-3 border-t">น้อยกว่า 18.5</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="p-3 border-t">ปกติ</td>
+                        <td class="p-3 border-t">18.5 - 22.9</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="p-3 border-t">น้ำหนักเกิน</td>
+                        <td class="p-3 border-t">23 - 24.9</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="p-3 border-t">โรคอ้วนระยะที่ 1</td>
+                        <td class="p-3 border-t">25 - 29.9</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="p-3 border-t">โรคอ้วนระยะที่ 2</td>
+                        <td class="p-3 border-t">30 หรือมากกว่า</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('calculate-btn').addEventListener('click', () => {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value) / 100; // Convert cm to m
+            const resultDiv = document.getElementById('result');
+
+            if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
+                resultDiv.innerHTML = '<p class="text-red-600">กรุณากรอกน้ำหนักและส่วนสูงให้ถูกต้อง</p>';
+                resultDiv.classList.remove('hidden');
+                return;
+            }
+
+            const bmi = (weight / (height * height)).toFixed(1);
+            let status = '';
+            let statusColor = '';
+
+            if (bmi < 18.5) {
+                status = 'น้ำหนักน้อยกว่าปกติ';
+                statusColor = 'text-yellow-600';
+            } else if (bmi >= 18.5 && bmi <= 22.9) {
+                status = 'ปกติ';
+                statusColor = 'text-green-600';
+            } else if (bmi >= 23 && bmi <= 24.9) {
+                status = 'น้ำหนักเกิน';
+                statusColor = 'text-orange-600';
+            } else if (bmi >= 25 && bmi <= 29.9) {
+                status = 'โรคอ้วนระยะที่ 1';
+                statusColor = 'text-red-600';
+            } else {
+                status = 'โรคอ้วนระยะที่ 2';
+                statusColor = 'text-red-800';
+            }
+
+            resultDiv.innerHTML = `
+                <p class="text-lg font-semibold">ค่า BMI ของคุณ: <span class="${statusColor}">${bmi}</span></p>
+                <p>สถานะ: <span class="${statusColor}">${status}</span></p>
+            `;
+            resultDiv.classList.remove('hidden');
+        });
+
+        document.getElementById('show-btn').addEventListener('click', () => {
+            const table = document.getElementById('detail');
+            table.classList.toggle('hidden');
+            const btn = document.getElementById('show-btn');
+            btn.textContent = table.classList.contains('hidden') ? 'แสดงตาราง BMI' : 'ซ่อนตาราง BMI';
+        });
+    </script>
+</body>
+</html>
